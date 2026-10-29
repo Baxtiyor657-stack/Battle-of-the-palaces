@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="uz">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+<meta name="theme-color" content="#08192b">
+<title>Saroylar Jangi</title>
+<style>
+:root{--bg:#071526;--panel:#10263d;--panel2:#16334e;--gold:#f4bd4f;--text:#f5f7fb;--muted:#a9bbce;--blue:#1689ee;--green:#20b875;--red:#f05c65}
+*{box-sizing:border-box} body{margin:0;background:radial-gradient(ellipse at top,#15395b 0,#071526 55%);color:var(--text);font:15px system-ui,-apple-system,sans-serif;min-height:100vh}
+button{font:inherit;cursor:pointer;border:0;border-radius:12px;padding:11px 13px;color:white;background:var(--blue);font-weight:700}
+button:disabled{opacity:.4;cursor:not-allowed}.app{max-width:520px;margin:auto;min-height:100vh;padding:14px 14px 88px}
+header{display:flex;align-items:center;justify-content:space-between;margin:3px 0 14px}.brand{font-size:20px;font-weight:900;letter-spacing:.3px}.brand span{color:var(--gold)}.pill{font-size:12px;color:var(--muted);background:#142c43;padding:6px 9px;border-radius:99px}
+.resources{display:grid;grid-template-columns:repeat(4,1fr);gap:7px;margin-bottom:12px}.res{background:#10263d;border:1px solid #24435f;border-radius:12px;padding:9px 4px;text-align:center;font-size:12px;color:var(--muted)}.res b{display:block;color:white;font-size:14px;margin-top:3px}
+.castle{position:relative;overflow:hidden;min-height:220px;border-radius:20px;border:1px solid #345773;background:linear-gradient(180deg,#1b4b70,#4e7e91 52%,#264e46 53%,#16352f);display:flex;align-items:center;justify-content:center;margin-bottom:12px}
+.castle:before{content:"";position:absolute;inset:0;background:linear-gradient(0deg,rgba(4,14,24,.65),transparent 65%),radial-gradient(circle at 50% 20%,#fff5b5aa,transparent 18%)}
+.castle-art{position:relative;text-align:center;font-size:86px;filter:drop-shadow(0 10px 8px #07152699);animation:float 3s ease-in-out infinite}.castle-caption{position:absolute;bottom:13px;left:15px;right:15px;display:flex;justify-content:space-between;align-items:end}.castle-caption strong{font-size:18px}.castle-caption small{color:#d9e7ef}
+@keyframes float{0%,100%{transform:translateY(0)}50%{transform:translateY(-5px)}}
+.card{background:linear-gradient(145deg,#10263d,#0c2034);border:1px solid #24435f;border-radius:16px;padding:14px;margin-bottom:12px}.row{display:flex;justify-content:space-between;align-items:center;gap:10px}.muted{color:var(--muted);font-size:13px}.bar{height:9px;background:#243e55;border-radius:20px;overflow:hidden;margin:9px 0}.bar i{display:block;height:100%;width:35%;background:linear-gradient(90deg,#19b875,#b5ed7a);transition:width .3s}
+h2{font-size:16px;margin:0 0 10px}h3{font-size:14px;margin:0}.actions{display:grid;grid-template-columns:1fr 1fr;gap:8px}.secondary{background:#24435f}.gold{background:linear-gradient(135deg,#f4bd4f,#d88c20);color:#201603}.green{background:var(--green)}.red{background:#b6384c}
+.tabs{position:fixed;bottom:0;left:0;right:0;background:#081726ee;backdrop-filter:blur(14px);border-top:1px solid #24435f;display:flex;justify-content:center;gap:4px;padding:8px max(8px,calc((100vw - 500px)/2)) calc(8px + env(safe-area-inset-bottom));z-index:5}
+.tabs button{flex:1;max-width:120px;background:transparent;color:var(--muted);padding:8px 3px;font-size:11px}.tabs button.active{background:#183a57;color:var(--gold)}
+.page{display:none}.page.active{display:block}.unit{display:flex;align-items:center;gap:10px;padding:10px 0;border-bottom:1px solid #203b54}.unit:last-child{border:0}.unit-icon{font-size:30px;width:42px;text-align:center}.unit-info{flex:1}.unit-info small{display:block;color:var(--muted);font-size:12px;margin-top:3px}.unit button{padding:9px 10px;font-size:12px}.enemy{display:flex;align-items:center;gap:10px;padding:11px 0;border-bottom:1px solid #203b54}.enemy .details{flex:1}.enemy:last-child{border:0}
+.notice{background:#102f45;border:1px solid #286082;padding:10px 12px;border-radius:12px;color:#cfe7f7;font-size:13px;margin-bottom:12px}.log{font-size:13px;color:#c7d5e1;line-height:1.55}.battlefield{border-radius:14px;padding:15px 8px;background:linear-gradient(#6699b4,#bdd1c7 45%,#547d55 46%,#254a35);text-align:center;color:#102235;margin:10px 0;overflow:hidden}.fighters{font-size:38px;letter-spacing:7px;animation:charge 1s infinite alternate}.battlefield.go .fighters{animation:charge .25s infinite alternate}.battlefield.go{outline:2px solid var(--gold)}@keyframes charge{from{transform:translateX(-4px)}to{transform:translateX(4px)}}
+.toast{position:fixed;top:12px;left:50%;transform:translate(-50%,-150%);background:#eaf6ff;color:#102235;padding:12px 16px;border-radius:12px;box-shadow:0 8px 30px #0006;transition:transform .25s;z-index:10;width:max-content;max-width:90%}.toast.show{transform:translate(-50%,0)}
+footer{text-align:center;color:#6f879d;font-size:11px;padding:10px}
+</style>
+</head>
+<body>
+<div class="app">
+<header><div class="brand">🏰 SAROYLAR <span>JANGI</span></div><div class="pill">BETA · 1.0</div></header>
+<div class="resources">
+<div class="res">🪙 Oltin<b id="gold">1 000</b></div><div class="res">🪵 Yog‘och<b id="wood">500</b></div><div class="res">🪨 Tosh<b id="stone">500</b></div><div class="res">🌾 Oziq-ovqat<b id="food">300</b></div>
+</div>
+<section id="home" class="page active">
+<div class="castle"><div class="castle-art" id="castleArt">🏰</div><div class="castle-caption"><div><strong id="castleName">Mening saroyim</strong><br><small id="castleLevel">1-daraja · Saltanat asoschisi</small></div><div class="pill">⭐ <span id="power">100</span> kuch</div></div></div>
+<div class="card"><div class="row"><h2>🏰 Saroy rivoji</h2><span class="muted" id="upgradeLabel">1 → 2-daraja</span></div><div class="bar"><i id="castleBar"></i></div><div class="muted" id="upgradeDesc">Keyingi daraja yangi imkoniyatlar ochadi.</div><div style="height:10px"></div><button class="gold" style="width:100%" id="upgradeBtn" onclick="upgradeCastle()">Saroyni yaxshilash · 🪙 250</button></div>
+<div class="card"><h2>📜 Saltanat topshiriqlari</h2><div class="row"><span>10 ta askar tayyorla</span><span class="pill" id="taskTroops">0/10</span></div><div class="bar"><i id="taskBar"></i></div><div class="row"><span class="muted">Mukofot: 150 oltin</span><button class="secondary" id="claimBtn" onclick="claimTask()" disabled>Olish</button></div></div>
+<div class="notice">💡 Maslahat: avval qo‘shin tayyorlang, so‘ng raqibga hujum qiling. Bu prototipdagi ma’lumotlar hozircha shu qurilmada saqlanadi.</div>
+</section>
+<section id="army" class="page">
+<div class="card"><h2>⚔️ Qo‘shinlar</h2><div class="muted">Jangga olib boradigan askarlaringizni tayyorlang.</div>
+<div class="unit"><div class="unit-icon">🛡️</div><div class="unit-info"><h3>Qilichboz</h3><small>Arzon va muvozanatli · Kuch: 10</small><small>🪙 50 · 🌾 10</small></div><button onclick="train('swordsman')">Tayyorlash</button></div>
+<div class="unit"><div class="unit-icon">🏹</div><div class="unit-info"><h3>Kamonchi</h3><small>Uzoqdan zarba · Kuch: 14</small><small>🪙 75 · 🌾 15</small></div><button onclick="train('archer')">Tayyorlash</button></div>
+<div class="unit"><div class="unit-icon">🐎</div><div class="unit-info"><h3>Otliq</h3><small>Tezkor hujum · Kuch: 22</small><small>🪙 120 · 🌾 25</small></div><button onclick="train('cavalry')">Tayyorlash</button></div>
+<div class="unit"><div class="unit-icon">🪨</div><div class="unit-info"><h3>Qamal quroli</h3><small>Saroy devorlariga kuchli zarba · Kuch: 35</small><small>🪙 200 · 🪵 80</small></div><button onclick="train('siege')">Yasash</button></div></div>
+<div class="card"><h2>📊 Sizning qo‘shiningiz</h2><div id="armySummary" class="log"></div><div class="bar"><i id="armyBar"></i></div><div class="muted" id="armyPower">Umumiy kuch: 0</div></div>
+</section>
+<section id="attack" class="page">
+<div class="card"><h2>⚔️ Raqiblar xaritasi</h2><div class="muted">Raqibni tanlang. Avval qo‘shinlarni joylashtiring, keyin jangni boshlang.</div>
+<div class="enemy"><div class="unit-icon">🏰</div><div class="details"><h3>Qoratepa qal’asi</h3><small class="muted">Saroy 1-daraja · Himoya kuchi 70</small></div><button onclick="selectEnemy(70,'Qoratepa qal’asi')">Tanlash</button></div>
+<div class="enemy"><div class="unit-icon">🏯</div><div class="details"><h3>Ko‘k minoralar</h3><small class="muted">Saroy 2-daraja · Himoya kuchi 130</small></div><button onclick="selectEnemy(130,'Ko‘k minoralar')">Tanlash</button></div>
+<div class="enemy"><div class="unit-icon">🛕</div><div class="details"><h3>Temir darvoza</h3><small class="muted">Saroy 3-daraja · Himoya kuchi 210</small></div><button onclick="selectEnemy(210,'Temir darvoza')">Tanlash</button></div>
+</div>
+<div class="card" id="battleCard"><h2>🗺️ Jangga tayyorgarlik</h2><div class="muted" id="enemySelected">Hali raqib tanlanmadi.</div><div style="height:8px"></div><div class="row"><span>🛡️ Qo‘shin kuchi</span><b id="attackPower">0</b></div><div class="bar"><i id="attackBar"></i></div><div class="muted">Jangdan oldin kamida bir necha askar tayyorlash tavsiya etiladi.</div><div class="battlefield" id="battlefield"><div class="fighters">🏇 ⚔️ 🏹</div><b>Jang maydoni</b><div class="muted" style="color:#233e49">Qo‘shin joylashtirilmoqda…</div></div><button class="green" style="width:100%" onclick="startBattle()" id="battleBtn">Jangni boshlash</button><div style="height:8px"></div><div id="battleResult" class="log"></div></div>
+</section>
+<section id="resources" class="page">
+<div class="card"><h2>🪙 Resurslar va ishlab chiqarish</h2><div class="muted">Har 30 soniyada oz miqdorda resurs qo‘shiladi.</div><div class="unit"><div class="unit-icon">⛏️</div><div class="unit-info"><h3>Oltin koni</h3><small>Yaxshilash: 150 oltin · +25 oltin/daq.</small></div><button onclick="build('gold')">Yaxshilash</button></div>
+<div class="unit"><div class="unit-icon">🪵</div><div class="unit-info"><h3>Yog‘och ombori</h3><small>Yaxshilash: 100 oltin · +20 yog‘och/daq.</small></div><button onclick="build('wood')">Yaxshilash</button></div>
+<div class="unit"><div class="unit-icon">🪨</div><div class="unit-info"><h3>Tosh koni</h3><small>Yaxshilash: 100 oltin · +20 tosh/daq.</small></div><button onclick="build('stone')">Yaxshilash</button></div>
+<div class="unit"><div class="unit-icon">🌾</div><div class="unit-info"><h3>Ferma</h3><small>Yaxshilash: 100 oltin · +20 oziq/daq.</small></div><button onclick="build('food')">Yaxshilash</button></div></div>
+<div class="card"><h2>🏆 Saltanat statistikasi</h2><div id="stats" class="log"></div></div>
+</section>
+<section id="menu" class="page">
+<div class="card"><h2>👑 Saltanat profili</h2><div class="row"><span class="muted">O‘yinchi</span><b>Saltanat asoschisi</b></div><div class="row" style="margin-top:10px"><span class="muted">Saroy darajasi</span><b id="profileLevel">1</b></div><div class="row" style="margin-top:10px"><span class="muted">Janglardagi g‘alaba</span><b id="wins">0</b></div><div class="row" style="margin-top:10px"><span class="muted">Janglardagi mag‘lubiyat</span><b id="losses">0</b></div></div>
+<div class="card"><h2>🏆 Reyting (demo)</h2><div class="unit"><span>🥇</span><div class="unit-info"><b>Temuriylar</b><small>12 450 kuch</small></div></div><div class="unit"><span>🥈</span><div class="unit-info"><b>Ko‘k Bo‘rilar</b><small>9 820 kuch</small></div></div><div class="unit"><span>🥉</span><div class="unit-info"><b>Sizning saltanatingiz</b><small id="rankPower">100 kuch</small></div></div></div>
+<div class="card"><h2>ℹ️ Prototip haqida</h2><p class="muted">Bu — ishlaydigan mahalliy demo. Haqiqiy ko‘p o‘yinchili rejim, hisoblar va serverda saqlash uchun backend hamda Telegram bot ulanishi kerak.</p><button class="secondary" style="width:100%" onclick="resetGame()">Demoni qayta boshlash</button></div>
+</section>
+<footer>SAROYLAR JANGI · DEMO 1.0</footer>
+</div>
+<nav class="tabs">
+<button class="active" data-page="home" onclick="showPage('home',this)">🏰<br>Saroyim</button>
+<button data-page="army" onclick="showPage('army',this)">⚔️<br>Qo‘shin</button>
+<button data-page="attack" onclick="showPage('attack',this)">🔥<br>Hujum</button>
+<button data-page="resources" onclick="showPage('resources',this)">🪙<br>Resurslar</button>
+<button data-page="menu" onclick="showPage('menu',this)">☰<br>Menyu</button>
+</nav>
+<div class="toast" id="toast"></div>
+<script>
+const initial={gold:1000,wood:500,stone:500,food:300,level:1,swordsman:0,archer:0,cavalry:0,siege:0,wins:0,losses:0,taskClaimed:false,buildGold:1,buildWood:1,buildStone:1,buildFood:1};
+let s={...initial,...load()}, enemy=null, enemyName="", busy=false;
+function load(){try{return JSON.parse(localStorage.getItem('saroylarJangiSave')||'{}')}catch(e){return {}}}
+function save(){localStorage.setItem('saroylarJangiSave',JSON.stringify(s))}
+function fmt(n){return Math.floor(n).toLocaleString('uz-UZ')}
+function notify(t){let e=document.getElementById('toast');e.textContent=t;e.classList.add('show');setTimeout(()=>e.classList.remove('show'),2100)}
+function power(){return s.swordsman*10+s.archer*14+s.cavalry*22+s.siege*35+100*s.level}
+function troops(){return s.swordsman+s.archer+s.cavalry+s.siege}
+function render(){
+['gold','wood','stone','food'].forEach(k=>document.getElementById(k).textContent=fmt(s[k]));
+document.getElementById('castleLevel').textContent=s.level+'-daraja · Saltanat asoschisi';
+document.getElementById('power').textContent=fmt(power());
+document.getElementById('upgradeLabel').textContent=s.level+' → '+(s.level+1)+'-daraja';
+document.getElementById('upgradeBtn').textContent='Saroyni yaxshilash · 🪙 '+fmt(250*s.level);
+document.getElementById('castleBar').style.width=Math.min(100,20+s.level*8)+'%';
+document.getElementById('upgradeDesc').textContent='Har daraja saltanat kuchini oshiradi. Keyingi daraja narxi: '+fmt(250*s.level)+' oltin, '+fmt(100*s.level)+' tosh.';
+document.getElementById('taskTroops').textContent=Math.min(10,troops())+'/10';
+document.getElementById('taskBar').style.width=Math.min(100,troops()*10)+'%';
+document.getElementById('claimBtn').disabled=troops()<10||s.taskClaimed;
+document.getElementById('claimBtn').textContent=s.taskClaimed?'Olingan':'Olish';
+document.getElementById('armySummary').innerHTML=`🛡️ Qilichboz: <b>${s.swordsman}</b><br>🏹 Kamonchi: <b>${s.archer}</b><br>🐎 Otliq: <b>${s.cavalry}</b><br>🪨 Qamal quroli: <b>${s.siege}</b>`;
+document.getElementById('armyPower').textContent='Umumiy kuch: '+fmt(power()-100*s.level)+' · Jami askar: '+troops();
+document.getElementById('attackPower').textContent=fmt(power()-100*s.level);
+document.getElementById('attackBar').style.width=Math.min(100,(power()-100*s.level)/300*100)+'%';
+document.getElementById('stats').innerHTML=`Saroy darajasi: <b>${s.level}</b><br>Jami askar: <b>${troops()}</b><br>Umumiy kuch: <b>${fmt(power())}</b><br>G‘alabalar: <b>${s.wins}</b>`;
+document.getElementById('profileLevel').textContent=s.level;document.getElementById('wins').textContent=s.wins;document.getElementById('losses').textContent=s.losses;document.getElementById('rankPower').textContent=fmt(power())+' kuch';
+document.getElementById('castleArt').textContent=s.level>=5?'🏯':s.level>=3?'🏰':'🏰';
+save()
+}
+function showPage(id,btn){document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));document.getElementById(id).classList.add('active');document.querySelectorAll('.tabs button').forEach(b=>b.classList.remove('active'));(btn||document.querySelector(`[data-page="${id}"]`)).classList.add('active');render()}
+function spend(cost){for(let k in cost)if(s[k]<cost[k]){notify('Resurs yetarli emas!');return false}for(let k in cost)s[k]-=cost[k];return true}
+function upgradeCastle(){let cost={gold:250*s.level,stone:100*s.level};if(!spend(cost))return;s.level++;notify('Saroy '+s.level+'-darajaga ko‘tarildi!');render()}
+const unitData={swordsman:{name:'Qilichboz',cost:{gold:50,food:10}},archer:{name:'Kamonchi',cost:{gold:75,food:15}},cavalry:{name:'Otliq',cost:{gold:120,food:25}},siege:{name:'Qamal quroli',cost:{gold:200,wood:80}}};
+function train(k){if(!spend(unitData[k].cost))return;s[k]++;notify(unitData[k].name+' tayyor!');render()}
+function claimTask(){if(troops()<10||s.taskClaimed)return;s.gold+=150;s.taskClaimed=true;notify('Topshiriq bajarildi: +150 oltin!');render()}
+function build(k){if(!spend({gold:100+(k==='gold'?50:0)}))return;s['build'+k[0].toUpperCase()+k.slice(1)]++;notify('Bino yaxshilandi!');render()}
+function selectEnemy(p,n){enemy=p;enemyName=n;document.getElementById('enemySelected').textContent='Tanlangan raqib: '+n+' · Himoya kuchi '+p;document.getElementById('battleResult').textContent='';notify(n+' tanlandi')}
+function startBattle(){
+ if(busy)return;if(enemy===null){notify('Avval raqibni tanlang!');return}if(troops()===0){notify('Avval qo‘shin tayyorlang!');showPage('army');return}
+ busy=true;let field=document.getElementById('battlefield');field.classList.add('go');document.getElementById('battleBtn').disabled=true;document.getElementById('battleBtn').textContent='Jang ketmoqda…';
+ document.getElementById('battleResult').textContent='Qo‘shinlar to‘qnashmoqda…';let my=power()-100*s.level;
+ setTimeout(()=>{field.classList.remove('go');let won=my>=enemy*0.75;let lossRatio=won?0.15:0.35;
+ ['swordsman','archer','cavalry','siege'].forEach(k=>{s[k]=Math.max(0,Math.floor(s[k]*(1-lossRatio)))});
+ let msg;if(won){s.wins++;s.gold+=Math.floor(120+enemy*0.8);s.wood+=50;msg=`🏆 G‘ALABA! ${enemyName} ustidan g‘alaba qozondingiz. Mukofot: oltin va yog‘och.`}else{s.losses++;msg=`🛡️ MAG‘LUBIYAT. ${enemyName} himoyasini yorib o‘ta olmadingiz. Qo‘shin yo‘qotildi.`}
+ document.getElementById('battleResult').textContent=msg;document.getElementById('battleBtn').disabled=false;document.getElementById('battleBtn').textContent='Yana jang qilish';busy=false;render()
+ },2200)
+}
+setInterval(()=>{s.gold+=Math.max(1,s.buildGold*3);s.wood+=Math.max(1,s.buildWood*2);s.stone+=Math.max(1,s.buildStone*2);s.food+=Math.max(1,s.buildFood*2);render()},30000);
+function resetGame(){if(confirm('Barcha demo taraqqiyotini o‘chirasizmi?')){s={...initial};save();render();notify('O‘yin qayta boshlandi')}}
+render();
+</script>
+</body>
+</html>
